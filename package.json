@@ -1,22 +1,29 @@
 {
-  "name": "develop",
+  "name": "coffeeshopemployees",
   "version": "1.0.0",
-  "description": "",
-  "main": "dist/index.js",
+  "description": "A database of employees at our coffee shop",
   "type": "module",
+  "main": "index.js",
   "scripts": {
-    "build": "npx tsc",
-    "start": "npm run build && node dist/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/server.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eoreilly0906/CoffeeShopEmployees.git"
+  },
+  "keywords": [],
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "inquirer": "^9.3.7",
-    "typescript": "^5.7.3"
+  "bugs": {
+    "url": "https://github.com/eoreilly0906/CoffeeShopEmployees/issues"
   },
-  "devDependencies": {
-    "@types/inquirer": "^9.0.7",
-    "@types/node": "^20.12.7"
+  "homepage": "https://github.com/eoreilly0906/CoffeeShopEmployees#readme",
+  "dependencies": {
+    "console.table": "^0.10.0",
+    "dotenv": "^16.4.7",
+    "inquirer": "^12.4.2",
+    "pg": "^8.13.3"
   }
 }
