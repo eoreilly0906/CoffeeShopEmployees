@@ -2,6 +2,13 @@ import inquirer from 'inquirer';
 import db from '../db/connection.js';
 
 function startApp() {
+    console.log('Welcome to the Simply Coffee Employee Tracker!');
+    console.log('  ( (');
+    console.log(' ........');
+    console.log(' |      |]');
+    console.log(' \\      /');
+    console.log('  `----\'');
+    
     inquirer.prompt({
         type: 'list',
         name: 'choice',
@@ -14,6 +21,7 @@ function startApp() {
             'Add a Role',
             'Add an Employee',
             'Update an Employee Role',
+            'Delete a Department',
             'Exit'
         ]
     }).then(answer => {
@@ -39,6 +47,9 @@ function startApp() {
             case 'Update an Employee Role':
                 updateEmployeeRole();
                 break;
+            case 'Delete a Department':
+                deleteDepartment();
+                break;
             default:
                 db.end();
         }
@@ -58,26 +69,31 @@ function viewDepartments() {
 }
 
 function viewRoles() {
-    db.query(`SELECT role.id, role.title, department.name AS department, role.salary 
-              FROM role JOIN department ON role.department_id = department.id`, 
-    (err, results) => {
-        if (err) throw err;
-        console.table(results);
+    db.query(`SELECT role.id, role.title, department.name AS department, role.salary
+              FROM role
+              LEFT JOIN department ON role.department_id = department.id`)
+    .then(result => {
+        console.table(result.rows);
+        startApp();
+    })
+    .catch(err => {
+        console.error('Error:', err);
         startApp();
     });
 }
 
 function viewEmployees() {
-    db.query(`SELECT employee.id, employee.first_name, employee.last_name, role.title, 
-              department.name AS department, role.salary, 
-              CONCAT(manager.first_name, ' ', manager.last_name) AS manager
-              FROM employee 
+    db.query(`SELECT employee.id, employee.first_name, employee.last_name, role.title, department.name AS department, role.salary, CONCAT(manager.first_name, ' ', manager.last_name) AS manager
+              FROM employee
               LEFT JOIN role ON employee.role_id = role.id
               LEFT JOIN department ON role.department_id = department.id
-              LEFT JOIN employee AS manager ON employee.manager_id = manager.id`, 
-    (err, results) => {
-        if (err) throw err;
-        console.table(results);
+              LEFT JOIN employee AS manager ON employee.manager_id = manager.id`)
+    .then(result => {
+        console.table(result.rows);
+        startApp();
+    })
+    .catch(err => {
+        console.error('Error:', err);
         startApp();
     });
 }
@@ -206,4 +222,32 @@ function updateEmployeeRole() {
     });
 }
 
+function deleteDepartment() {
+    // First get all departments
+    db.query('SELECT * FROM department')
+        .then(result => {
+            // Prompt user to select from existing departments
+            return inquirer.prompt({
+                type: 'list',
+                name: 'id',
+                message: 'Select the department to delete:',
+                choices: result.rows.map(dept => ({
+                    name: dept.name,
+                    value: dept.id
+                }))
+            });
+        })
+        .then(answer => {
+            // Delete department by ID instead of name
+            return db.query('DELETE FROM department WHERE id = $1', [answer.id]);
+        })
+        .then(() => {
+            console.log('Department deleted successfully!');
+            startApp();
+        })
+        .catch(err => {
+            console.error('Error:', err);
+            startApp();
+        });
+}
 startApp();
