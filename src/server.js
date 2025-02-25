@@ -15,14 +15,14 @@ function startApp() {
         message: 'What would you like to do?',
         choices: [
             'View All Departments',
-            'View All Roles',
-            'View All Employees',
             'Add a Department',
+            'Delete a Department',
+            'View All Roles',
             'Add a Role',
+            'Delete a Role',
+            'View All Employees',
             'Add an Employee',
             'Update an Employee Role',
-            'Delete a Department',
-            'Delete a Role',
             'Delete an Employee',
             'Exit'
         ]
@@ -72,14 +72,14 @@ function continueApp() {
         message: 'What would you like to do?',
         choices: [
             'View All Departments',
-            'View All Roles',
-            'View All Employees',
             'Add a Department',
+            'Delete a Department',
+            'View All Roles',
             'Add a Role',
+            'Delete a Role',
+            'View All Employees',
             'Add an Employee',
             'Update an Employee Role',
-            'Delete a Department',
-            'Delete a Role',
             'Delete an Employee',
             'Exit'
         ]
