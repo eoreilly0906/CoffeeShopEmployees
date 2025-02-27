@@ -1,6 +1,6 @@
 import inquirer from 'inquirer';
 import db from '../db/connection.js';
-
+//start the app
 function startApp() {
     console.log('Welcome to the Simply Coffee Employee Tracker!');
     console.log('  ( ( (');
@@ -8,7 +8,7 @@ function startApp() {
     console.log(' |      |]');
     console.log(' \\      /');
     console.log('  `----\'');
-    
+    //prompt the user with a list of options
     inquirer.prompt({
         type: 'list',
         name: 'choice',
@@ -27,6 +27,7 @@ function startApp() {
             'Exit'
         ]
     }).then(answer => {
+        //switch case to handle the user's choice
         switch (answer.choice) {
             case 'View All Departments':
                 viewDepartments();
@@ -64,6 +65,7 @@ function startApp() {
     });
 }
 
+//continue the app
 function continueApp() {
     console.log('Remember to take a coffee break!')
     inquirer.prompt({
@@ -84,6 +86,7 @@ function continueApp() {
             'Exit'
         ]
     }).then(answer => {
+        //switch case to handle the user's choice
         switch (answer.choice) {
             case 'View All Departments':
                 viewDepartments();
@@ -133,6 +136,7 @@ function viewDepartments() {
         });
 }
 
+//view all roles
 function viewRoles() {
     db.query(`SELECT role.id, role.title, department.name AS department, role.salary
               FROM role
@@ -147,6 +151,7 @@ function viewRoles() {
     });
 }
 
+//view all employees
 function viewEmployees() {
     db.query(`SELECT employee.id, employee.first_name, employee.last_name, role.title, department.name AS department, role.salary, CONCAT(manager.first_name, ' ', manager.last_name) AS manager
               FROM employee
@@ -181,6 +186,7 @@ function addDepartment() {
     });
 }
 
+//add a role
 function addRole() {
     db.query('SELECT * FROM department')
         .then(result => {
@@ -203,6 +209,7 @@ function addRole() {
                     choices: departments.map(dept => ({ name: dept.name, value: dept.id }))
                 }
             ]).then(answer => {
+                //insert the role into the database
                 db.query('INSERT INTO role (title, salary, department_id) VALUES ($1, $2, $3)', 
                     [answer.title, answer.salary, answer.department_id])
                     .then(() => {
@@ -221,6 +228,7 @@ function addRole() {
         });
 }
 
+//add an employee
 function addEmployee() {
     db.query('SELECT * FROM role')
         .then(result => {
@@ -272,6 +280,7 @@ function addEmployee() {
         });
 }
 
+//update an employee's role
 function updateEmployeeRole() {
     let employees;
     let roles;
@@ -284,7 +293,7 @@ function updateEmployeeRole() {
         .then(roleResult => {
             roles = roleResult.rows;
             return inquirer.prompt([
-                {
+                { //prompt the user to choose an employee to update
                     type: 'list',
                     name: 'employee_id',
                     message: 'Choose an employee to update:',
@@ -293,7 +302,7 @@ function updateEmployeeRole() {
                         value: emp.id 
                     }))
                 },
-                {
+                { //prompt the user to choose a new role
                     type: 'list',
                     name: 'role_id',
                     message: 'Choose a new role:',
