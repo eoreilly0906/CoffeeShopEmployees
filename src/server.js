@@ -3,7 +3,7 @@ import db from '../db/connection.js';
 
 function startApp() {
     console.log('Welcome to the Simply Coffee Employee Tracker!');
-    console.log('  ( (');
+    console.log('  ( ( (');
     console.log(' ........');
     console.log(' |      |]');
     console.log(' \\      /');
